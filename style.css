@@ -42,9 +42,8 @@ body:hover .cursor-outline.hovered { width: 80px; height: 80px; background-color
 .project-card:hover { border-color: rgba(34, 211, 238, 0.5); box-shadow: 0 0 30px rgba(34, 211, 238, 0.1); }
 
 
-/* --- NEW: VERTICAL LINE PROJECT LAYOUT STYLES --- */
+/* --- VERTICAL LINE PROJECT LAYOUT STYLES --- */
 
-/* 1. Skill Tags for Line Layout */
 .skill-tag-line {
     padding: 0.5rem 1.2rem;
     background-color: transparent;
@@ -57,14 +56,12 @@ body:hover .cursor-outline.hovered { width: 80px; height: 80px; background-color
     cursor: default;
 }
 
-/* Hover effect on tags when hovering the whole card */
 .project-line-card:hover .skill-tag-line {
     border-color: #22d3ee;
     color: #22d3ee;
     box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
 }
 
-/* 2. Outline Button (View Code) */
 .line-btn {
     padding: 1rem 2rem;
     border: 1px solid rgba(255, 255, 255, 0.3);
@@ -101,7 +98,6 @@ body:hover .cursor-outline.hovered { width: 80px; height: 80px; background-color
     width: 100%;
 }
 
-/* 3. Filled Button (Live Demo) */
 .line-btn-fill {
     padding: 1rem 2rem;
     background: #22d3ee;
@@ -121,4 +117,18 @@ body:hover .cursor-outline.hovered { width: 80px; height: 80px; background-color
     background: transparent;
     color: #22d3ee;
     box-shadow: 0 0 40px rgba(34, 211, 238, 0.4);
+}
+
+/* --- MOBILE OPTIMIZATIONS (CLEAN) --- */
+@media (max-width: 768px) {
+    /* Bring back the normal cursor on mobile/tablet */
+    body {
+        cursor: auto !important;
+    }
+    
+    /* Hide the custom cursor elements completely to save performance */
+    .cursor-dot, 
+    .cursor-outline {
+        display: none !important;
+    }
 }

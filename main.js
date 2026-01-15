@@ -80,8 +80,22 @@ if(mobileMenuBtn && mobileMenu) {
     });
 }
 
-// --- 2. SITE ANIMATIONS ---
+// --- 2. SITE ANIMATIONS & NAV SCROLL ---
 function initSite() {
+    // Nav Scroll Logic
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            // Scrolled down: Opaque background, remove blend mode
+            nav.classList.remove('mix-blend-difference', 'bg-black/20', 'border-white/5', 'md:bg-transparent');
+            nav.classList.add('bg-black/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10');
+        } else {
+            // Top: Transparent with blend mode
+            nav.classList.add('mix-blend-difference', 'bg-black/20', 'border-white/5', 'md:bg-transparent');
+            nav.classList.remove('bg-black/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10');
+        }
+    });
+
     gsap.to('.hero-text', { y: 0, duration: 1.5, stagger: 0.2, ease: "power4.out" });
     gsap.to('.hero-sub', { opacity: 1, duration: 1, delay: 1 });
     gsap.to('.hero-tagline', { opacity: 1, duration: 1, delay: 1.1 });
@@ -113,7 +127,7 @@ window.addEventListener('scroll', () => {
     });
 });
 
-// --- 4. THREE.JS PARTICLES ---
+// --- 4. THREE.JS PARTICLES (OPTIMIZED) ---
 function initThree() {
     const canvas = document.getElementById('webgl-canvas');
     if (!canvas) return;
@@ -123,7 +137,10 @@ function initThree() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     const geometry = new THREE.BufferGeometry();
-    const particlesCount = 2000;
+    
+    // Optimization: Fewer particles on mobile devices
+    const particlesCount = window.innerWidth < 768 ? 800 : 2000;
+    
     const posArray = new Float32Array(particlesCount * 3);
     for(let i = 0; i < particlesCount * 3; i++) { posArray[i] = (Math.random() - 0.5) * 15; }
     geometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -164,13 +181,15 @@ document.querySelectorAll('a, button, input, textarea').forEach(el => {
     el.addEventListener('mouseenter', () => cursorOutline.classList.add('hovered'));
     el.addEventListener('mouseleave', () => cursorOutline.classList.remove('hovered'));
 });
-VanillaTilt.init(document.querySelectorAll(".tilt-element"), { max: 10, speed: 400, glare: true, "max-glare": 0.2 });
+
+// IMPORTANT: Only enable tilt effect on desktop (prevents mobile shaking)
+if (window.matchMedia("(min-width: 768px)").matches) {
+    VanillaTilt.init(document.querySelectorAll(".tilt-element"), { max: 10, speed: 400, glare: true, "max-glare": 0.2 });
+}
 
 // --- 6. CONTACT FORM (GOOGLE SHEETS) ---
 const contactForm = document.getElementById('contact-form');
 const submitBtn = document.getElementById('submit-btn');
-
-// NOTE: IF YOUR FORM FAILS, YOU LIKELY NEED TO RE-DEPLOY THE SCRIPT AS A NEW VERSION
 const scriptURL = 'https://script.google.com/macros/s/AKfycbwmgnCGxKph8KVeyrj8b0f1b26Lf3Xsgf5Mf9nGQTsqWHqKmMAN8u8PBeo5mhvVNW0FNQ/exec';
 
 if(contactForm) {
